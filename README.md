@@ -1,7 +1,8 @@
 # DurhamUpzoning
 ### Overview
-      This study will examine zoning reforms implemented on October 1, 2019 in Durham, North Carolina, a city with a population of roughly 280,000. The zoning changes were part of the Expanded Housing Choices Initiative (EHC), which amended the city’s Unified Development Ordinance (UDO) to upzone neighborhoods located in the urban tier to promote increased densities, construction of accessory dwelling units, and housing development on smaller lots. The primary goals of the revised UDO are to reduce pressure on low-income neighborhoods of color in Durham that have become hot spots for development due to the city’s economic growth and to increase housing affordability, density, and racial and economic diversity in wealthier, whiter neighborhoods. This study proposes to examine the effects of upzoning in selected Durham neighborhoods. Three primary research questions will be addressed in this study. Below we discuss the research questions, hypotheses, and the gaps in knowledge they fill.
-      Large-scale upzoning in cities is rare. According to Gabbe (2018) when New York City experienced a period of dramatic rezoning between 2003-2009, only 5% of city lots were upzoned. Similarly, in Los Angeles between 2002-2014, only 1.1% of the land area was upzoned. Only a few studies have evaluated the effects of zoning changes on property markets (Thorson, 1997; Atkinson-Palombo, 2010; Freemark, 2020.) Most studies that explore the effects of zoning compare the restrictiveness of zoning between regions and the effects on housing markets. These studies are cross-sectional and have severe limitations due to possible endogeneity – does zoning affect housing market outcomes or vice versa? While an increasing number of places – the city of Minneapolis and all cities in the state of Oregon – are adopting expansive zoning reforms by eliminating single-family zoning, evaluations of the impacts of these reforms have not been conducted. Answering Research Question 1, below, will advance our understanding of the housing and neighborhood effects resulting from large-scale upzoning.
+This study will examine zoning reforms implemented on October 1, 2019 in Durham, North Carolina, a city with a population of roughly 280,000. The zoning changes were part of the Expanded Housing Choices Initiative (EHC), which amended the city’s Unified Development Ordinance (UDO) to upzone neighborhoods located in the urban tier to promote increased densities, construction of accessory dwelling units, and housing development on smaller lots. The primary goals of the revised UDO are to reduce pressure on low-income neighborhoods of color in Durham that have become hot spots for development due to the city’s economic growth and to increase housing affordability, density, and racial and economic diversity in wealthier, whiter neighborhoods. This study proposes to examine the effects of upzoning in selected Durham neighborhoods. Three primary research questions will be addressed in this study. Below we discuss the research questions, hypotheses, and the gaps in knowledge they fill.
+
+Large-scale upzoning in cities is rare. According to Gabbe (2018) when New York City experienced a period of dramatic rezoning between 2003-2009, only 5% of city lots were upzoned. Similarly, in Los Angeles between 2002-2014, only 1.1% of the land area was upzoned. Only a few studies have evaluated the effects of zoning changes on property markets (Thorson, 1997; Atkinson-Palombo, 2010; Freemark, 2020.) Most studies that explore the effects of zoning compare the restrictiveness of zoning between regions and the effects on housing markets. These studies are cross-sectional and have severe limitations due to possible endogeneity – does zoning affect housing market outcomes or vice versa? While an increasing number of places – the city of Minneapolis and all cities in the state of Oregon – are adopting expansive zoning reforms by eliminating single-family zoning, evaluations of the impacts of these reforms have not been conducted. Answering Research Question 1, below, will advance our understanding of the housing and neighborhood effects resulting from large-scale upzoning.
   
   ----
   ### Problem Statement
@@ -41,15 +42,15 @@ Data Ambassador(s): Clare, Armel
 Volunteer Team Members:
 
 ---
-### Project Discussion and Materials
+### Project Materials Locations
 
-Project Summary and background reading - [Google Drive] (https://drive.google.com/drive/folders/1dTV7840Mdw_kOgU99-wcNTWkng3FWun1)
+Project Summary and background reading - Google Drive: https://drive.google.com/drive/folders/1dTV7840Mdw_kOgU99-wcNTWkng3FWun1
 
-Data on [Google Drive Data Folder] (https://github.com/DataKind-DC/DurhamUpzoning)
+Data on Google Drive Data Folder: https://github.com/DataKind-DC/DurhamUpzoning
 
 Code on https://github.com/DataKind-DC/DurhamUpzoning
 
-Project Communication - #durham channel on [DKDC Slack] (http://dkdc.herokuapp.com/)
+Project Communication - #durham channel on DKDC Slack: http://dkdc.herokuapp.com/
 
 ---
 ### Volunteers Involvement
