@@ -8,11 +8,14 @@ library(leaflet)
 # Fetching All Durham Data
 #1. Zoning Data
 base_url1= "https://opendata.arcgis.com/datasets/3dbb7dea6cc14544ad302061809df597_12.geojson"
-zoning<-st_read(base_url)
-mapview::mapview(zoning)
-#2.Development Tiers
-#https://live-durhamnc.opendata.arcgis.com/datasets/development-tiers?geometry=-79.731%2C35.857%2C-77.997%2C36.245&selectedAttribute=TYPE
+zoning<-st_read("https://opendata.arcgis.com/datasets/3dbb7dea6cc14544ad302061809df597_12.geojson")
+plot(zoning["ZONE_CODE"])
+ggplot() + 
+  geom_sf(data = res) + 
+  geom_sf(data=zoning, aes(fill=ZONE_CODE),alpha=I(0.5))
 
+#2. TIER
+#https://live-durhamnc.opendata.arcgis.com/datasets/development-tiers?geometry=-79.731%2C35.857%2C-77.997%2C36.245&selectedAttribute=TYPE
 base_url2 = "https://opendata.arcgis.com/datasets/02e611b671f64310b7b2a420e67238c3_5.geojson"
 dev_tiers <- st_read("https://opendata.arcgis.com/datasets/02e611b671f64310b7b2a420e67238c3_5.geojson")
 plot(dev_tiers["TYPE"])
