@@ -54,10 +54,26 @@ Project Communication - #durham channel on DKDC Slack: http://dkdc.herokuapp.com
 
 ---
 ### Volunteers Involvement
-  There are three main components in this project. Based on your skills/experience, you can decide to help in one or more of the components:
-  - Exploratory Data Analysis: map the data (matching the shape file to ACS), visualize the data, look for outliers, etc.
-  - Data Cleaning: manipulate the data for use based on what you discovered
-  - Prototyping and executing: make a Minimum Viable Product (MVP) tha allows the users to test the functionality of the product idea; and adjust your prototype based on testing and finalize the model you have selected and/or the user experience for interacting with the data product you have created.
+  There are four sub-tasks. Based on your skills/experience, you can decide to help in one or more of the components:
+  - Task 1: initially merged the city tier to census tract level and found that boundaries don't overlap perfectly
+       Maybe we can try blockgroups level data?
+  - Task 2: Analysis with ACS Data.
+  - Get ACS 5-year data (2015-2019) and produce Durham county estimates by block groups
+  - Task 3: Zoning datafile from Durham city website
+  Merge the map to ACS tract data/block groups data
+ To get a better understanding of the zoning data
+    Only show Zone_code starts with R
+       1.Different abbreviates stand for? Maybe make them into 3-4 categories for better analysis?
+       2.Other variables on the file
+       3.Nicer map
+      4.Crosstab with city tier
+
+- Task 4: Descriptive statistics of the variables
+    can we join these two datasets?
+    Building Permits
+https://durham.municipal.codes/UDO/4.1.1
+https://live-durhamnc.opendata.arcgis.com/datasets/all-building-permits-1/data?geometry=-79.725%2C35.858%2C-77.991%2C36.246
+
   
   ---
   ### Deliverables
