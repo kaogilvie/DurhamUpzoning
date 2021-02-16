@@ -6,7 +6,7 @@ Large-scale upzoning in cities is rare. According to Gabbe (2018) when New York 
   
   ----
   ### Problem Statement
-  I want to use Durham property data to determine the effects of a zoning change so that Durham’s planning department, UNC, and the communities in Durham can understand whether upzoning is effective in relieving gentrification pressure.
+  I want to use Durham property and open source data to determine the effects of a zoning changes so that Durham’s planning department, UNC, and the communities in Durham can understand whether large-scale upzoning is effective in relieving gentrification pressure.
   
   ---
   ### Research Questions
