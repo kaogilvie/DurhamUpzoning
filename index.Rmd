@@ -1,0 +1,300 @@
+---
+title: "Durham Upzoning"
+output:
+  html_document: 
+    theme: journal
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 3
+    toc_collapsed: TRUE
+    css: ["style.css","MyFontsWebfontsKit.css"]
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+#install.packages("leaflet")
+library(leaflet)
+library(sf)
+library(tidyverse)
+library(tmap)
+library(spatstat)
+library(maptools)
+library(raster)
+library(tidycensus)
+library(sf)
+library(jsonlite)
+library(geojsonio)
+library(hrbrthemes)
+library(formattable)
+library(scales)
+library(ggrepel)
+library(ggthemes)
+library(kableExtra)
+library(googlesheets4)
+
+
+percent <- function(x, digits = 1, format = "f", ...) {
+  paste0(formatC(100 * x, format = format, digits = digits, ...), "%")
+}
+
+
+```
+
+
+### Overview
+
+This project examines zoning reforms implemented on October 1, 2019 in Durham, North Carolina, a city with a population of roughly 280,000. The zoning changes were part of the Expanded Housing Choices Initiative (EHC), which amended the city’s Unified Development Ordinance (UDO) to upzone neighborhoods located in the urban tier to promote increased densities, construction of accessory dwelling units, and housing development on smaller lots. The primary goals of the revised UDO are to reduce pressure on low-income neighborhoods of color in Durham that have become hot spots for development due to the city’s economic growth and to increase housing affordability, density, and racial and economic diversity in wealthier, whiter neighborhoods. This study proposes to examine the effects of upzoning in selected Durham neighborhoods. Three primary research questions will be addressed in this study. Below we discuss the research questions, hypotheses, and the gaps in knowledge they fill.
+
+Large-scale upzoning in cities is rare. According to Gabbe (2018) when New York City experienced a period of dramatic rezoning between 2003-2009, only 5% of city lots were upzoned. Similarly, in Los Angeles between 2002-2014, only 1.1% of the land area was upzoned. Only a few studies have evaluated the effects of zoning changes on property markets (Thorson, 1997; Atkinson-Palombo, 2010; Freemark, 2020.) Most studies that explore the effects of zoning compare the restrictiveness of zoning between regions and the effects on housing markets. These studies are cross-sectional and have severe limitations due to possible endogeneity – does zoning affect housing market outcomes or vice versa? While an increasing number of places – the city of Minneapolis and all cities in the state of Oregon – are adopting expansive zoning reforms by eliminating single-family zoning, evaluations of the impacts of these reforms have not been conducted. Answering Research Question 1, below, will advance our understanding of the housing and neighborhood effects resulting from large-scale upzoning.
+
+### Research Questions
+
+This project explores the effects of upzoning in selected neighborhoods on the following:
+
+* Housing unit affordability (house prices and rents), housing unit turnover (resale rates, demolition/reconstruction rates)
+* Economic and demographic composition (household income and race)
+* Structural composition (type, size, and number of housing units)?
+
+
+### Data
+
+The main sources of data used for the project are:
+
+* Parcel level data giving sales and tax assessment information, along with features of the homes contained.
+* Building permit data
+* US Census and American Cummunity Survey Data
+* Zoning data, if useful
+
+Shapefiles for Zoning and Development Tiers can be found on [Durham's open data portal](https://opendata.dc.gov/){target="_blank"}:
+
+* [Development Tiers](https://live-durhamnc.opendata.arcgis.com/datasets/development-tiers-1/explore?location=36.051050%2C-78.863900%2C10.84){target="_blank"}
+* [Land Parcels](https://live-durhamnc.opendata.arcgis.com/datasets/parcels-1/explore){target="_blank"}
+
+
+
+### Development Tiers
+
+One portion of the analysis will involve comparing characteristics and trends of Durham's urban tier with those of its suburban tier. The urban tier has been upzoned, while the suburban tier has not. These tiers are mapped below.
+
+```{r data ,echo = FALSE, message=FALSE, warning = FALSE, results="hide"}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning = FALSE)
+
+#2. TIER
+
+base_url2 = "https://opendata.arcgis.com/datasets/02e611b671f64310b7b2a420e67238c3_5.geojson"
+dev_tiers <- st_read(base_url2)%>% st_transform(4326)%>%st_as_sf()
+
+
+# #notes:cn stands for The Compact Neighborhood Tier 
+# metro_stations<-st_read("Metro_Station_Entrances_in_DC", quiet = TRUE)%>% st_transform(4326)%>%
+#   mutate(NAME=as.character(NAME),
+#          LINE=as.character(LINE))%>%
+#   separate(LINE,sep=",", into = c("1","2","3"))%>%
+#   pivot_longer(9:11,values_to = "MetroLine",names_to = "dummy")%>%
+#   filter(!is.na(MetroLine))%>%
+#   filter(str_detect(NAME, "ELEV",negate=TRUE))%>%
+#   mutate(MetroLine=str_trim(MetroLine))%>%
+#   st_as_sf()
+# 
+
+# ##Make Buffers
+# 
+# metroBuffer <- st_buffer(metro,.25/69)
+# metroStationsBuffer <- st_buffer(metro_stations,.25/69)
+# metroStationsIndBuffer <- st_buffer(metro_stations,.25/69)
+# 
+# 
+# metroStationsBuffer<-metroStationsBuffer %>%
+#   group_by(MetroLine) %>% 
+#   summarize(geometry = st_union(geometry))
+# 
+# metroStationsIndBuffer<-metroStationsIndBuffer %>%
+#   group_by(NAME) %>% 
+#   summarize(geometry = st_union(geometry),
+#             Lines=paste(unique(str_to_title(MetroLine)),collapse = ", "))
+
+
+# metroIcons <- makeIcon(iconUrl = "https://www.dcmetroapp.com/images/production/artwork.png", iconWidth = 12, iconHeight = 12)
+
+
+
+  #addPolylines(color=metro$NAME, group = "Metro Lines")%>%
+  #addMarkers(data=metro_stations,group = "Metro Stations",icon = metroIcons,  popup = ~as.character(NAME))%>%
+
+
+
+```
+
+```{r map ,echo = FALSE, message=FALSE, warning = FALSE}
+
+factpal <- colorFactor(topo.colors(5), dev_tiers$TYPE)
+
+leaflet(dev_tiers)%>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(color = "#444444", weight = 0.1, smoothFactor = 0.5,
+    opacity = 1, fillOpacity = 0.2,
+    fillColor = ~factpal(dev_tiers$TYPE),
+    highlightOptions = highlightOptions(color = "#444444", weight = 1,
+      bringToFront = TRUE),
+  label = dev_tiers$NAME,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "12px",
+    direction = "auto"))%>%
+  setView(-78.90013,35.99421,  zoom = 11)  %>%
+  addLegend("bottomright", pal = factpal,values=dev_tiers$TYPE,
+    title = "Development Tiers",
+    labFormat = labelFormat(prefix = "$"),
+    opacity = .2  )
+
+  #addPolylines(color=metro$NAME, group = "Metro Lines")%>%
+  #addMarkers(data=metro_stations,group = "Metro Stations",icon = metroIcons,  popup = ~as.character(NAME))%>%
+
+
+
+```
+
+### Comparing Census and ACS Datasets
+
+The decennial census contains the most granular data, down to the census block level. It does not contain as many fields as the ACS, however, and some of those fields may be of interest. The ACS does not go down to the block level, and so we need to make sure that block groups can add to together the approximate the areas that make up the development tiers of interest.
+
+#### Census 2020 Block Level
+
+At a block level, there is good alignment between the boundaries of the development tiers and the census blocks. Below, Census blocks are plotted and colored by the development tier they are contained within. If a block overlaps a development tier boundary, the block is assigned to the tier that a greater portion of its area is within. There are also thicker black lines, which are the development tier boundaries.
+
+```{r ,echo = FALSE, message=FALSE, warning = FALSE, results="hide"}
+
+setwd("C:/Users/rcarder/Documents/dev/DurhamData")
+Durham_Block_Join<-st_read("Durham_Block_2020_Census.geojson")
+#Durham_Block_Group_Join<-st_read("Durham_BlockGroup_2020_Census.geojson")
+Durham_Block_Group_Join<-st_read("Durham_BlockGroup_2019_ACS.geojson")
+
+
+#st_crs(Durham_Block)
+#st_crs(dev_tiers)
+```
+
+```{r ,echo = FALSE, message=FALSE, warning = FALSE}
+
+factpal <- colorFactor(topo.colors(5), Durham_Block_Join$TYPE)
+
+leaflet(Durham_Block_Join)%>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(color = "#444444", weight = 0.1, smoothFactor = 0.5,
+    opacity = 1, fillOpacity = 0.2,
+    fillColor = ~factpal(Durham_Block_Join$TYPE),
+    highlightOptions = highlightOptions(color = "#444444", weight = 1,
+      bringToFront = TRUE),
+  label = Durham_Block_Join$NAME.x,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "12px",
+    direction = "auto"))%>%
+      addPolygons(data=dev_tiers,color = "#444444", weight = 0.3, smoothFactor = 0.5,
+    opacity = 1, fillOpacity = 0,
+    fillColor = NA,
+    highlightOptions = highlightOptions(color = "#444444", weight = 1,
+      bringToFront = TRUE))%>%
+  setView(-78.90013,35.99421,  zoom = 11) %>%
+  addLegend("bottomright", pal = factpal,values=dev_tiers$TYPE,
+    title = "Census Blocks by Development Tiers",
+    labFormat = labelFormat(prefix = "$"),
+    opacity = .2  )
+
+  #addPolylines(color=metro$NAME, group = "Metro Lines")%>%
+  #addMarkers(data=metro_stations,group = "Metro Stations",icon = metroIcons,  popup = ~as.character(NAME))%>%
+
+
+
+```
+
+
+#### ACS 2019 Block Group Level
+
+At the block group level, the alignment with development tier boundaries is not as good. Below, block groups are plotted and colored by the development tier they are contained within. If a block group overlaps a development tier boundary, the block group is assigned to the tier that a greater portion of its area is within. There are also thicker black lines, which are the development tier boundaries. Here, there are some areas that are misaligned, however, the block group borders can still generally approximate the urban and suburban tiers. When ACS data is needed, these can be used.
+
+```{r ,echo = FALSE, message=FALSE, warning = FALSE}
+
+factpal <- colorFactor(topo.colors(5), Durham_Block_Join$TYPE)
+
+leaflet(Durham_Block_Group_Join)%>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(color = "#444444", weight = 0.1, smoothFactor = 0.5,
+    opacity = 1, fillOpacity = 0.2,
+    fillColor = ~factpal(Durham_Block_Group_Join$TYPE),
+    highlightOptions = highlightOptions(color = "#444444", weight = 1,
+      bringToFront = TRUE),
+    
+  label = Durham_Block_Group_Join$NAME.x,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "12px",
+    direction = "auto"))%>%
+    addPolygons(data=dev_tiers,color = "#444444", weight = 0.3, smoothFactor = 0.5,
+    opacity = 1, fillOpacity = 0,
+    fillColor = NA,
+    highlightOptions = highlightOptions(color = "#444444", weight = 1,
+      bringToFront = TRUE))%>%
+  setView(-78.90013,35.99421,  zoom = 11)%>%
+  addLegend("bottomright", pal = factpal,values=dev_tiers$TYPE,
+    title = "Census Block Groups by Development Tiers",
+    labFormat = labelFormat(prefix = "$"),
+    opacity = .2  )
+
+  #addPolylines(color=metro$NAME, group = "Metro Lines")%>%
+  #addMarkers(data=metro_stations,group = "Metro Stations",icon = metroIcons,  popup = ~as.character(NAME))%>%
+
+
+
+```
+
+#### Census 2020 Population Statistics
+
+Using the block data from the 2020 Census, some basic population and race totals across the blocks in each tier can be computed:
+
+```{r}
+basic_pop<-Durham_Block_Join%>%
+  st_drop_geometry()%>%
+  group_by(TYPE)%>%
+  summarize(`Total Pop`=formattable::comma(sum(Total.Population),0),
+            #`Pop per Sq. Mile`=formattable::comma(sum(Total.Population)/sum(SQMI),1),
+            `Percent White NH`= percent(sum(Non.Hispanic.White)/sum(Total.Population),1),
+            `Percent Black`=percent(sum(Black.Alone)/sum(Total.Population),1),
+            `Percent Hispanic`=percent(sum(Total.Hispanic)/sum(Total.Population),1)
+            )%>%
+  arrange(desc(`Total Pop`))
+  
+  
+```
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE}
+kableExtra::kable(basic_pop, booktabs = T) %>%
+kableExtra::kable_styling(latex_options = "striped", position = "left")
+```
+
+
+#### ACS 2019 Population Statistics
+
+The same basic population and race totals across can be computed for the 2019 ACS block groups contained within each development tier. This will be a more valid comparison once the 2020 ACS data is released. If we see similar demographic characteristics to the 2020 Census block data, it would indicate that we are still getting a pretty good approximation of the makeup of the urban and suburban tiers even with the less granular ACS block group data:
+
+```{r}
+basic_pop_acs<-Durham_Block_Group_Join%>%
+  st_drop_geometry()%>%
+  group_by(TYPE)%>%
+  summarize(`Total Pop`=formattable::comma(sum(Total.Population),0),
+            #`Pop per Sq. Mile`=formattable::comma(sum(Total.Population)/sum(SQMI),1),
+            `Percent White NH`= percent(sum(Non.Hispanic.White)/sum(Total.Population),1),
+            `Percent Black`=percent(sum(Black.Alone)/sum(Total.Population),1),
+            `Percent Hispanic`=percent(sum(Total.Hispanic)/sum(Total.Population),1)
+            )%>%
+  arrange(desc(`Total Pop`))
+  
+  
+```
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE}
+kableExtra::kable(basic_pop_acs, booktabs = T) %>%
+kableExtra::kable_styling(latex_options = "striped", position = "left")
+```

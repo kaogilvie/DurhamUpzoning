@@ -2,8 +2,12 @@ library(ggmap)
 library(ggplot2)
 library(rjson)
 library(jsonlite)
+library(sf)
 library(RCurl)
 library(leaflet)
+library(tidyverse)
+
+#install.packages("sf")
 
 # Fetching All Durham Data
 #1. Zoning Data
@@ -11,7 +15,7 @@ base_url1= "https://opendata.arcgis.com/datasets/3dbb7dea6cc14544ad302061809df59
 zoning<-st_read("https://opendata.arcgis.com/datasets/3dbb7dea6cc14544ad302061809df597_12.geojson")
 plot(zoning["ZONE_CODE"])
 ggplot() + 
-  geom_sf(data = res) + 
+  #geom_sf(data = res) + 
   geom_sf(data=zoning, aes(fill=ZONE_CODE),alpha=I(0.5))
 
 #2. TIER
@@ -20,9 +24,9 @@ base_url2 = "https://opendata.arcgis.com/datasets/02e611b671f64310b7b2a420e67238
 dev_tiers <- st_read("https://opendata.arcgis.com/datasets/02e611b671f64310b7b2a420e67238c3_5.geojson")
 plot(dev_tiers["TYPE"])
 ggplot() + 
-  geom_sf(data = res) + 
-  geom_sf(data=dev_tiers, aes(fill=TYPE),alpha=I(0.5))+
-  geom_sf(data = tract, fill = NA, color = "red")
+  #geom_sf(data = res) + 
+  geom_sf(data=dev_tiers, aes(fill=TYPE),alpha=I(0.5))#+
+  #geom_sf(data = tract, fill = NA, color = "red")
 
 #notes:cn stands for The Compact Neighborhood Tier 
 
